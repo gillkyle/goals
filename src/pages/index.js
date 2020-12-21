@@ -54,7 +54,7 @@ const IndexPage = ({ data }) => {
           >
             View &rarr;
           </a>{" "}
-          the airtable where the data is coming from.
+          the data in Airtable
         </div>
         <h2 className="text-2xl leading-6 font-bold text-gray-800">
           Arise at 6:30am
