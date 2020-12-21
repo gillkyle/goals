@@ -5,12 +5,6 @@ import "react-calendar-heatmap/dist/styles.css";
 import Portrait from "../images/portrait-square-small.jpg";
 import "../styles/chart.css";
 
-// styles
-const pageStyles = {
-  fontFamily: "Inter, -apple-system, sans-serif, serif",
-};
-
-// markup
 const IndexPage = ({ data }) => {
   console.log(data);
   const dates = data.allAirtable.nodes.map((node) => {
@@ -31,7 +25,12 @@ const IndexPage = ({ data }) => {
   });
   console.log(dates);
   return (
-    <main style={pageStyles}>
+    <main
+      className="h-full"
+      style={{
+        fontFamily: `fontFamily: "Inter, -apple-system, sans-serif, serif",`,
+      }}
+    >
       <title>Home Page</title>
       <section className="flex space-x-4 items-center width-100 px-10 pt-10 pb-16 bg-gradient-to-br from-lightBlue-400 to-indigo-500">
         <div className="">
@@ -42,9 +41,21 @@ const IndexPage = ({ data }) => {
         </div>
         <div className="">
           <h1 className="text-2xl leading-6 font-bold text-white">Goals</h1>
+          <p className="text-lg text-blueGray-300">Kyle Gill | 2021</p>
         </div>
       </section>
-      <section className="p-10 bg-blueGray-50">
+      <section className="p-10 bg-blueGray-50 h-full">
+        <div className="bg-white text-gray-600 rounded-xl shadow-md p-4 transform -translate-y-16">
+          <a
+            href="https://airtable.com/shrUpUS4fnwJInCVn"
+            target="_blank"
+            rel="noopener"
+            className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg shadow-sm px-3 py-2 text-white font-semibold mr-1"
+          >
+            View &rarr;
+          </a>{" "}
+          the airtable where the data is coming from.
+        </div>
         <h2 className="text-2xl leading-6 font-bold text-gray-800">
           Arise at 6:30am
         </h2>
