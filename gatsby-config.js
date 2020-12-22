@@ -4,6 +4,9 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-postcss`,
+    `gatsby-plugin-image`,
+    `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-source-airtable`,
       options: {
@@ -11,7 +14,11 @@ module.exports = {
         tables: [
           {
             baseId: `appIhwXXgds9RGvVd`,
-            tableName: `Wake`,
+            tableName: `Get Up`,
+          },
+          {
+            baseId: `appIhwXXgds9RGvVd`,
+            tableName: `Scripture Study`,
           },
         ],
       },

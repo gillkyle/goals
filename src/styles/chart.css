@@ -13,3 +13,6 @@
 .color-empty {
   fill: #ebecee !important;
 }
+.react-calendar-heatmap-week > rect {
+  rx: 2px;
+}
