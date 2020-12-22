@@ -57,7 +57,7 @@ const IndexPage = ({ data }) => {
         fontFamily: `fontFamily: "Inter, -apple-system, sans-serif, serif",`,
       }}
     >
-      <title>Home Page</title>
+      <title>Goal Tracker</title>
       <section className="flex space-x-4 items-center width-100 sm:px-10 px-4 pt-10 pb-16 bg-gradient-to-br from-lightBlue-400 to-indigo-500">
         <div>
           {/* <img
