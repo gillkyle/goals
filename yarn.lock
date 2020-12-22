@@ -6103,6 +6103,17 @@ gatsby-plugin-image@^0.4.0:
     gatsby-core-utils "^1.7.0"
     prop-types "^15.7.2"
 
+gatsby-plugin-manifest@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-manifest/-/gatsby-plugin-manifest-2.9.0.tgz#81233217670c3b9eba1a2559a971cd6b4429a12c"
+  integrity sha512-bOXcix1ZfnwDY66NYmySYFGLCi09wq5Hsci1eWMhGwsFnRxI0X2pAzd3NoG6iosvYyuPnDovmAxgVWG0qcs7Lw==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    gatsby-core-utils "^1.7.0"
+    gatsby-plugin-utils "^0.6.0"
+    semver "^7.3.2"
+    sharp "^0.26.3"
+
 gatsby-plugin-page-creator@^2.7.1:
   version "2.7.1"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-page-creator/-/gatsby-plugin-page-creator-2.7.1.tgz#ad8e81d62a48b52497cf09c1d8518e70b929275a"

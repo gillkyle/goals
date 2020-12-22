@@ -23,5 +23,19 @@ module.exports = {
         ],
       },
     },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: `Goals`,
+        short_name: `Goals`,
+        description: `Goal tracking dashboard.`,
+        lang: `en`,
+        display: `standalone`,
+        icon: `src/images/favicon.png`,
+        start_url: `/`,
+        background_color: `#38bdf8`,
+        theme_color: `#fff`,
+      },
+    },
   ],
 };
