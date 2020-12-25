@@ -124,6 +124,20 @@ const IndexPage = ({ data }) => {
             number={Math.round((study.completed / dayOfYear) * 100)}
           />
         </div>
+        {/* TEMPLE GOAL */}
+        <Goal
+          name="Temple or family history"
+          subtitle="Go to the temple or do an hour of family history (while temples are closed mainly)."
+          dates={study.dates}
+        />
+        <div className="grid grid-cols-3 space-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Completed Days" number={study.completed} />
+          <StatCard title="Failed Days" number={study.failed} />
+          <StatCard
+            title="Current % of Success"
+            number={Math.round((study.completed / dayOfYear) * 100)}
+          />
+        </div>
       </section>
     </main>
   );

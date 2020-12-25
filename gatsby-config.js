@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 module.exports = {
   siteMetadata: {
     title: "Goals",
@@ -10,7 +12,7 @@ module.exports = {
     {
       resolve: `gatsby-source-airtable`,
       options: {
-        apiKey: `key2pjMRTYJP4Msrq`,
+        apiKey: process.env.AIRTABLE,
         tables: [
           {
             baseId: `appIhwXXgds9RGvVd`,
