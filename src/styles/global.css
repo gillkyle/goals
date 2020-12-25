@@ -3,12 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html,
-body,
-#___gatsby,
-#gatsby-focus-wrapper {
-  height: 100vh;
-}
 .gatsby-image-wrapper [data-main-image] {
   border-radius: 9999px;
 }

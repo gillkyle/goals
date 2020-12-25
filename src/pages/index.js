@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Helmet } from "react-helmet";
 import { getDayOfYear, isWeekend, isPast } from "date-fns";
 import { graphql } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
@@ -57,7 +58,10 @@ const IndexPage = ({ data }) => {
         fontFamily: `fontFamily: "Inter, -apple-system, sans-serif, serif",`,
       }}
     >
-      <title>Goal Tracker</title>
+      <Helmet>
+        <html lang="en" />
+        <title>Goal Tracker</title>
+      </Helmet>
       <section className="flex space-x-4 items-center width-100 sm:px-10 px-4 pt-10 pb-16 bg-gradient-to-br from-lightBlue-400 to-indigo-500">
         <div>
           {/* <img
@@ -104,7 +108,7 @@ const IndexPage = ({ data }) => {
           <StatCard title="Completed Days" number={wake.completed} />
           <StatCard title="Failed Days" number={wake.failed} />
           <StatCard
-            title="Current % of Success"
+            title="% of Success"
             number={Math.round(
               (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
             )}
@@ -120,21 +124,21 @@ const IndexPage = ({ data }) => {
           <StatCard title="Completed Days" number={study.completed} />
           <StatCard title="Failed Days" number={study.failed} />
           <StatCard
-            title="Current % of Success"
+            title="% of Success"
             number={Math.round((study.completed / dayOfYear) * 100)}
           />
         </div>
         {/* TEMPLE GOAL */}
         <Goal
           name="Temple or family history"
-          subtitle="Go to the temple or do an hour of family history (while temples are closed mainly)."
+          subtitle="Go to the temple or do an hour of family history research, weekly."
           dates={study.dates}
         />
         <div className="grid grid-cols-3 space-x-4 mt-4 mb-8 max-w-3xl">
           <StatCard title="Completed Days" number={study.completed} />
           <StatCard title="Failed Days" number={study.failed} />
           <StatCard
-            title="Current % of Success"
+            title="% of Success"
             number={Math.round((study.completed / dayOfYear) * 100)}
           />
         </div>
