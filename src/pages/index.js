@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { getDayOfYear, getYear, isWeekend, isPast } from "date-fns";
+import { getDayOfYear, getYear } from "date-fns";
 import { graphql } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
 import "react-calendar-heatmap/dist/styles.css";
@@ -11,14 +11,14 @@ import StatCard from "../components/stat-card";
 import Fingerprint from "../icons/fingerprint";
 import Calendar from "../icons/calendar";
 
-const FAKE_DATE = "2021-01-05";
+// const FAKE_DATE = "2021-01-05"; used to debug
 
 const calculate = (nodes) => {
   let completed = 0;
   let failed = 0;
   const dates = nodes
     .filter((node) => {
-      const year = getYear(new Date(FAKE_DATE));
+      const year = getYear(new Date());
       console.log({ year });
       console.log(node.data.Day);
       return node.data.Day.includes(String(year));
@@ -54,7 +54,7 @@ const IndexPage = ({ data }) => {
   const study = calculate(data.study.nodes);
   const temple = calculate(data.temple.nodes);
 
-  const dayOfYear = getDayOfYear(new Date(FAKE_DATE)) + 1;
+  const dayOfYear = getDayOfYear(new Date()) + 1;
 
   return (
     <main
@@ -81,7 +81,7 @@ const IndexPage = ({ data }) => {
         </div>
         <div>
           <h1 className="text-3xl font-bold text-white mb-1">Goals</h1>
-          <div className="flex space-x-2 items-center text-white text-xs mb-1 italic">
+          <div className="flex space-x-2 items-center text-white text-xs mb-1 italic ">
             "...by small and simple things are great things brought to pass"
           </div>
           <div className="flex space-x-2 items-center">
@@ -105,6 +105,46 @@ const IndexPage = ({ data }) => {
             View &rarr;
           </a>{" "}
           the data in Airtable
+        </div>
+        {/* STUDY GOAL */}
+        <Goal
+          name="Daily scripture study"
+          subtitle="Write down something I learned every day of the week."
+          dates={study.dates}
+        />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={study.completed} />
+          <StatCard
+            title="Failed Days"
+            number={study.failed}
+            invert={study.failed !== 0}
+          />
+          <StatCard title="Day of Year" number={dayOfYear} />
+          <StatCard
+            title="Success %"
+            number={Math.round((study.completed / dayOfYear) * 100)}
+            invert={Math.round((study.completed / dayOfYear) * 100) < 80}
+          />
+        </div>
+        {/* TEMPLE GOAL */}
+        <Goal
+          name="Temple or family history"
+          subtitle="Go to the temple or do an hour of family history research, once weekly."
+          dates={temple.dates}
+        />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={temple.completed} />
+          <StatCard
+            title="Failed Days"
+            number={temple.failed}
+            invert={temple.failed !== 0}
+          />
+          <StatCard title="Day of Year" number={dayOfYear} />
+          <StatCard
+            title="Success %"
+            number={Math.round((temple.completed / dayOfYear) * 100)}
+            invert={Math.round((temple.completed / dayOfYear) * 100) < 80}
+          />
         </div>
         {/* WAKE UP GOAL */}
         <Goal
@@ -130,46 +170,6 @@ const IndexPage = ({ data }) => {
                 (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
               ) < 80
             }
-          />
-        </div>
-        {/* STUDY GOAL */}
-        <Goal
-          name="Daily scripture study"
-          subtitle="Write down something I learned every day of the week."
-          dates={study.dates}
-        />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
-          <StatCard title="Done Days" number={study.completed} />
-          <StatCard
-            title="Failed Days"
-            number={study.failed}
-            invert={study.failed !== 0}
-          />
-          <StatCard title="Day of Year" number={dayOfYear} />
-          <StatCard
-            title="Success %"
-            number={Math.round((study.completed / dayOfYear) * 100)}
-            invert={Math.round((study.completed / dayOfYear) * 100) < 80}
-          />
-        </div>
-        {/* TEMPLE GOAL */}
-        <Goal
-          name="Temple or family history"
-          subtitle="Go to the temple or do an hour of family history research, weekly."
-          dates={temple.dates}
-        />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
-          <StatCard title="Done Days" number={temple.completed} />
-          <StatCard
-            title="Failed Days"
-            number={temple.failed}
-            invert={temple.failed !== 0}
-          />
-          <StatCard title="Day of Year" number={dayOfYear} />
-          <StatCard
-            title="Success %"
-            number={Math.round((temple.completed / dayOfYear) * 100)}
-            invert={Math.round((temple.completed / dayOfYear) * 100) < 80}
           />
         </div>
       </section>

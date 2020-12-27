@@ -5,7 +5,7 @@ const StatCard = ({ title, invert = false, number }) => {
     <div className="shadow-sm rounded-lg bg-white sm:p-6 p-3">
       <h3 className="font-semibold text-sm text-blueGray-500">{title}</h3>
       {invert && (
-        <p className="font-bold text-3xl text-red-400">
+        <p className="font-bold text-3xl text-red-300">
           {number}
           <span className="text-sm">{title.includes(`%`) && `%`}</span>
         </p>

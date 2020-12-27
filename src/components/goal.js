@@ -1,6 +1,7 @@
 import * as React from "react";
 import CalendarHeatmap from "react-calendar-heatmap";
 import ReactTooltip from "react-tooltip";
+import { getYear } from "date-fns";
 
 const Goal = ({ name, subtitle, dates }) => {
   React.useEffect(() => {
@@ -20,8 +21,8 @@ const Goal = ({ name, subtitle, dates }) => {
             showWeekdayLabels
             horizontal={true}
             weekdayLabels={["S", "M", "T", "W", "Th", "F", "S"]}
-            startDate={new Date("2020-12-31")}
-            endDate={new Date("2021-12-31")}
+            startDate={new Date(`${getYear(new Date()) - 1}-12-31`)}
+            endDate={new Date(`${getYear(new Date())}-12-31`)}
             values={dates}
             className="width-64"
             gutterSize={1.5}
