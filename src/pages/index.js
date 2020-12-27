@@ -75,7 +75,10 @@ const IndexPage = ({ data }) => {
           />
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white mb-1">Goals</h1>
+          <h1 className="text-3xl font-bold text-white mb-1">Goals</h1>
+          <div className="flex space-x-2 items-center text-white text-xs mb-1 italic">
+            "...by small and simple things are great things brought to pass"
+          </div>
           <div className="flex space-x-2 items-center">
             <Fingerprint className="fill-current text-orange-400 h-5" />
             <p className="text-md text-orange-100">Kyle Gill</p>
