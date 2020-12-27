@@ -16,7 +16,6 @@ const FAKE_DATE = "2021-01-05";
 const calculate = (nodes) => {
   let completed = 0;
   let failed = 0;
-  let weekdayCount = 0;
   const dates = nodes
     .filter((node) => {
       const year = getYear(new Date(FAKE_DATE));
@@ -26,10 +25,7 @@ const calculate = (nodes) => {
     })
     .map((node) => {
       let colorDensity = 0;
-      const date = new Date(node.data.Day);
-      if (!isWeekend(date) && isPast(date)) {
-        weekdayCount += 1;
-      }
+
       if (node.data.Status === `Done`) {
         completed += 1;
         colorDensity = 3;
@@ -50,16 +46,15 @@ const calculate = (nodes) => {
     dates,
     completed,
     failed,
-    weekdayCount,
   };
 };
 
 const IndexPage = ({ data }) => {
   const wake = calculate(data.wake.nodes);
   const study = calculate(data.study.nodes);
+  const temple = calculate(data.temple.nodes);
 
-  const dayOfYear = getDayOfYear(new Date(FAKE_DATE));
-  console.log(dayOfYear + 1);
+  const dayOfYear = getDayOfYear(new Date(FAKE_DATE)) + 1;
 
   return (
     <main
@@ -114,17 +109,27 @@ const IndexPage = ({ data }) => {
         {/* WAKE UP GOAL */}
         <Goal
           name="Get up at 6:30am"
-          subtitle="Every day from M-F."
+          subtitle="Every day from M-F, weekend success criteria is 7+ hours of sleep."
           dates={wake.dates}
         />
-        <div className="grid grid-cols-3 space-x-4 mt-4 mb-8 max-w-3xl">
-          <StatCard title="Completed Days" number={wake.completed} />
-          <StatCard title="Failed Days" number={wake.failed} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={wake.completed} />
           <StatCard
-            title="% of Success"
+            title="Failed Days"
+            number={wake.failed}
+            invert={wake.failed !== 0}
+          />
+          <StatCard title="Day of Year" number={dayOfYear} />
+          <StatCard
+            title="Success %"
             number={Math.round(
               (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
             )}
+            invert={
+              Math.round(
+                (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
+              ) < 80
+            }
           />
         </div>
         {/* STUDY GOAL */}
@@ -133,26 +138,38 @@ const IndexPage = ({ data }) => {
           subtitle="Write down something I learned every day of the week."
           dates={study.dates}
         />
-        <div className="grid grid-cols-3 space-x-4 mt-4 mb-8 max-w-3xl">
-          <StatCard title="Completed Days" number={study.completed} />
-          <StatCard title="Failed Days" number={study.failed} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={study.completed} />
           <StatCard
-            title="% of Success"
+            title="Failed Days"
+            number={study.failed}
+            invert={study.failed !== 0}
+          />
+          <StatCard title="Day of Year" number={dayOfYear} />
+          <StatCard
+            title="Success %"
             number={Math.round((study.completed / dayOfYear) * 100)}
+            invert={Math.round((study.completed / dayOfYear) * 100) < 80}
           />
         </div>
         {/* TEMPLE GOAL */}
         <Goal
           name="Temple or family history"
           subtitle="Go to the temple or do an hour of family history research, weekly."
-          dates={study.dates}
+          dates={temple.dates}
         />
-        <div className="grid grid-cols-3 space-x-4 mt-4 mb-8 max-w-3xl">
-          <StatCard title="Completed Days" number={study.completed} />
-          <StatCard title="Failed Days" number={study.failed} />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={temple.completed} />
           <StatCard
-            title="% of Success"
-            number={Math.round((study.completed / dayOfYear) * 100)}
+            title="Failed Days"
+            number={temple.failed}
+            invert={temple.failed !== 0}
+          />
+          <StatCard title="Day of Year" number={dayOfYear} />
+          <StatCard
+            title="Success %"
+            number={Math.round((temple.completed / dayOfYear) * 100)}
+            invert={Math.round((temple.completed / dayOfYear) * 100) < 80}
           />
         </div>
       </section>
@@ -175,6 +192,16 @@ export const query = graphql`
       }
     }
     study: allAirtable(filter: { table: { eq: "Scripture Study" } }) {
+      nodes {
+        id
+        table
+        data {
+          Day
+          Status
+        }
+      }
+    }
+    temple: allAirtable(filter: { table: { eq: "Temple & Family History" } }) {
       nodes {
         id
         table

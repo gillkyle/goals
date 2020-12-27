@@ -12,7 +12,7 @@ const Goal = ({ name, subtitle, dates }) => {
       <h2 className="text-2xl font-bold text-gray-800">{name}</h2>
       <p className="mb-4 text-blueGray-600">{subtitle}</p>
       <div className="max-w-3xl bg-white rounded-lg shadow-sm sm:pt-6 pt-3 sm:pr-8 pr-4 sm:pl-4 pl-2">
-        <p className="ml-3 mb-2 font-semibold text-sm text-blueGray-500">
+        <p className="ml-2 mb-2 font-semibold text-sm text-blueGray-500">
           Days Tracked
         </p>
         <div className="overflow-scroll">
