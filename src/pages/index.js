@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { getDayOfYear, isWeekend, isPast } from "date-fns";
+import { getDayOfYear, getYear, isWeekend, isPast } from "date-fns";
 import { graphql } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
 import "react-calendar-heatmap/dist/styles.css";
@@ -11,31 +11,40 @@ import StatCard from "../components/stat-card";
 import Fingerprint from "../icons/fingerprint";
 import Calendar from "../icons/calendar";
 
+const FAKE_DATE = "2021-01-05";
+
 const calculate = (nodes) => {
   let completed = 0;
   let failed = 0;
   let weekdayCount = 0;
-  const dates = nodes.map((node) => {
-    let colorDensity = 0;
-    const date = new Date(node.data.Day);
-    if (!isWeekend(date) && isPast(date)) {
-      weekdayCount += 1;
-    }
-    if (node.data.Status === `Done`) {
-      completed += 1;
-      colorDensity = 3;
-    } else if (node.data.Status === `Pass`) {
-      colorDensity = 2;
-    } else if (node.data.Status === `Failed`) {
-      failed += 1;
-      colorDensity = 1;
-    } else if (node.data.Status === `Not Started`) {
-      colorDensity = 0;
-    } else if (node.data.Status === null) {
-      return {};
-    }
-    return { date: node.data.Day, count: colorDensity };
-  });
+  const dates = nodes
+    .filter((node) => {
+      const year = getYear(new Date(FAKE_DATE));
+      console.log({ year });
+      console.log(node.data.Day);
+      return node.data.Day.includes(String(year));
+    })
+    .map((node) => {
+      let colorDensity = 0;
+      const date = new Date(node.data.Day);
+      if (!isWeekend(date) && isPast(date)) {
+        weekdayCount += 1;
+      }
+      if (node.data.Status === `Done`) {
+        completed += 1;
+        colorDensity = 3;
+      } else if (node.data.Status === `Pass`) {
+        colorDensity = 2;
+      } else if (node.data.Status === `Failed`) {
+        failed += 1;
+        colorDensity = 1;
+      } else if (node.data.Status === `Not Started`) {
+        colorDensity = 0;
+      } else if (node.data.Status === null) {
+        return {};
+      }
+      return { date: node.data.Day, count: colorDensity };
+    });
 
   return {
     dates,
@@ -49,7 +58,8 @@ const IndexPage = ({ data }) => {
   const wake = calculate(data.wake.nodes);
   const study = calculate(data.study.nodes);
 
-  const dayOfYear = getDayOfYear(new Date());
+  const dayOfYear = getDayOfYear(new Date(FAKE_DATE));
+  console.log(dayOfYear + 1);
 
   return (
     <main
