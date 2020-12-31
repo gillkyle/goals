@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { getDayOfYear, getYear } from "date-fns";
+import { getDayOfYear, getYear, sub, format, isThisWeek } from "date-fns";
 import { graphql } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
+import ReactTooltip from "react-tooltip";
 import "react-calendar-heatmap/dist/styles.css";
 import "../styles/chart.css";
 
@@ -10,21 +11,39 @@ import Goal from "../components/goal";
 import StatCard from "../components/stat-card";
 import Fingerprint from "../icons/fingerprint";
 import Calendar from "../icons/calendar";
+import MinusCircle from "../icons/minus-circle";
+import CheckCircle from "../icons/check-circle";
 
 // const FAKE_DATE = "2021-01-05"; used to debug
 
 const calculate = (nodes) => {
   let completed = 0;
   let failed = 0;
+  let trackedToday = false;
+  let trackedYesterday = false;
+  let trackedThisWeek = false;
   const dates = nodes
     .filter((node) => {
       const year = getYear(new Date());
       console.log({ year });
       console.log(node.data.Day);
+      if (!node) return false;
+      if (!node.data) return false;
+      if (node.data.Day === null) return false;
       return node.data.Day.includes(String(year));
     })
     .map((node) => {
       let colorDensity = 0;
+      // verify that both today and yesterday were tracked to report in the overview
+      const today = new Date();
+      const todayFormatted = format(today, "yyyy-MM-dd");
+      const yesterday = sub(new Date(), {
+        days: 1,
+      });
+      const yesterdayFormatted = format(yesterday, "yyyy-MM-dd");
+      if (node.data.Day === todayFormatted) trackedToday = true;
+      if (node.data.Day === yesterdayFormatted) trackedYesterday = true;
+      if (isThisWeek(new Date(node.data.Day))) trackedThisWeek = true;
 
       if (node.data.Status === `Done`) {
         completed += 1;
@@ -46,6 +65,9 @@ const calculate = (nodes) => {
     dates,
     completed,
     failed,
+    trackedToday,
+    trackedYesterday,
+    trackedThisWeek,
   };
 };
 
@@ -53,8 +75,11 @@ const IndexPage = ({ data }) => {
   const wake = calculate(data.wake.nodes);
   const study = calculate(data.study.nodes);
   const temple = calculate(data.temple.nodes);
+  const journal = calculate(data.journal.nodes);
 
-  const dayOfYear = getDayOfYear(new Date()) + 1;
+  console.log(temple);
+
+  const dayOfYear = getDayOfYear(new Date());
 
   return (
     <main
@@ -74,6 +99,7 @@ const IndexPage = ({ data }) => {
             className="border-blueGray-200 border-4 rounded-full max-h-32 max-w-32 shadow-lg"
           /> */}
           <StaticImage
+            alt="Kyle Gill"
             src="../images/portrait-square-small.jpg"
             className="border-blueGray-200 border-4 rounded-full shadow-lg"
             width={120}
@@ -86,11 +112,11 @@ const IndexPage = ({ data }) => {
           </div>
           <div className="flex space-x-2 items-center">
             <Fingerprint className="fill-current text-orange-400 h-5" />
-            <p className="text-md text-orange-100">Kyle Gill</p>
+            <p className="text-md text-white">Kyle Gill</p>
           </div>
           <div className="flex space-x-2 items-center">
             <Calendar className="stroke-current text-orange-400 h-5" />
-            <p className="text-md text-orange-100">2021</p>
+            <p className="text-md text-white">2021</p>
           </div>
         </div>
       </section>
@@ -106,6 +132,59 @@ const IndexPage = ({ data }) => {
           </a>{" "}
           the data in Airtable
         </div>
+        <div className="mb-7">
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">
+            Today's Overview
+          </h2>
+          <div className="flex flex-row space-x-4">
+            <div className="w-max">
+              <StatCard
+                title="Day of Year"
+                number={dayOfYear}
+                className="sm:p-7 p-6"
+              />
+            </div>
+            <ul className="flex flex-col justify-center space-y-1 text-gray-500">
+              <li className="flex flex-row">
+                {journal.trackedToday ? <CheckCircle /> : <MinusCircle />}
+                Journaling {!journal.trackedToday && "not"} reported
+              </li>
+              <li className="flex flex-row">
+                {study.trackedToday ? <CheckCircle /> : <MinusCircle />}Study{" "}
+                {!study.trackedToday && "not"} reported
+              </li>
+              <li className="flex flex-row">
+                {temple.trackedThisWeek ? <CheckCircle /> : <MinusCircle />}
+                Temple & FH {!temple.trackedThisWeek && "not"} reported this
+                week
+              </li>
+              <li className="flex flex-row">
+                {wake.trackedToday ? <CheckCircle /> : <MinusCircle />}Get up{" "}
+                {!wake.trackedToday && "not"} reported
+              </li>
+            </ul>
+          </div>
+        </div>
+        {/* JOURNAL GOAL */}
+        <Goal
+          name="Daily journaling"
+          subtitle="Write in my journal every day of the week."
+          dates={journal.dates}
+        />
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-4 gap-x-4 mt-4 mb-8 max-w-3xl">
+          <StatCard title="Done Days" number={journal.completed} />
+          <StatCard
+            title="Failed Days"
+            number={journal.failed}
+            invert={journal.failed !== 0}
+          />
+          <StatCard
+            title="Success %"
+            number={Math.round((journal.completed / dayOfYear) * 100)}
+            addendum="%"
+            invert={Math.round((journal.completed / dayOfYear) * 100) < 80}
+          />
+        </div>
         {/* STUDY GOAL */}
         <Goal
           name="Daily scripture study"
@@ -119,10 +198,10 @@ const IndexPage = ({ data }) => {
             number={study.failed}
             invert={study.failed !== 0}
           />
-          <StatCard title="Day of Year" number={dayOfYear} />
           <StatCard
             title="Success %"
             number={Math.round((study.completed / dayOfYear) * 100)}
+            addendum="%"
             invert={Math.round((study.completed / dayOfYear) * 100) < 80}
           />
         </div>
@@ -139,10 +218,10 @@ const IndexPage = ({ data }) => {
             number={temple.failed}
             invert={temple.failed !== 0}
           />
-          <StatCard title="Day of Year" number={dayOfYear} />
           <StatCard
             title="Success %"
             number={Math.round((temple.completed / dayOfYear) * 100)}
+            addendum="%"
             invert={Math.round((temple.completed / dayOfYear) * 100) < 80}
           />
         </div>
@@ -159,12 +238,12 @@ const IndexPage = ({ data }) => {
             number={wake.failed}
             invert={wake.failed !== 0}
           />
-          <StatCard title="Day of Year" number={dayOfYear} />
           <StatCard
             title="Success %"
             number={Math.round(
               (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
             )}
+            addendum="%"
             invert={
               Math.round(
                 (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
@@ -173,6 +252,11 @@ const IndexPage = ({ data }) => {
           />
         </div>
       </section>
+      <ReactTooltip
+        delayHide={50}
+        effect="solid"
+        backgroundColor="rgba(0,0,0,0.5)"
+      />
     </main>
   );
 };
@@ -201,7 +285,17 @@ export const query = graphql`
         }
       }
     }
-    temple: allAirtable(filter: { table: { eq: "Temple & Family History" } }) {
+    temple: allAirtable(filter: { table: { eq: "Temple or Family History" } }) {
+      nodes {
+        id
+        table
+        data {
+          Day
+          Status
+        }
+      }
+    }
+    journal: allAirtable(filter: { table: { eq: "Journal" } }) {
       nodes {
         id
         table

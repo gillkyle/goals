@@ -20,7 +20,7 @@ const Goal = ({ name, subtitle, dates }) => {
           <CalendarHeatmap
             showWeekdayLabels
             horizontal={true}
-            weekdayLabels={["S", "M", "T", "W", "Th", "F", "S"]}
+            weekdayLabels={["M", "T", "W", "Th", "F", "S", "S"]}
             startDate={new Date(`${getYear(new Date()) - 1}-12-31`)}
             endDate={new Date(`${getYear(new Date())}-12-31`)}
             values={dates}
@@ -44,11 +44,6 @@ const Goal = ({ name, subtitle, dates }) => {
           />
         </div>
       </div>
-      <ReactTooltip
-        delayHide={50}
-        effect="solid"
-        backgroundColor="rgba(0,0,0,0.5)"
-      />
     </React.Fragment>
   );
 };

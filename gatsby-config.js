@@ -23,6 +23,14 @@ module.exports = {
             baseId: `appIhwXXgds9RGvVd`,
             tableName: `Scripture Study`,
           },
+          {
+            baseId: `appIhwXXgds9RGvVd`,
+            tableName: `Temple or Family History`,
+          },
+          {
+            baseId: `appIhwXXgds9RGvVd`,
+            tableName: `Journal`,
+          },
         ],
       },
     },
