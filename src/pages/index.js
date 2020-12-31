@@ -155,8 +155,7 @@ const IndexPage = ({ data }) => {
               </li>
               <li className="flex flex-row">
                 {temple.trackedThisWeek ? <CheckCircle /> : <MinusCircle />}
-                Temple & FH {!temple.trackedThisWeek && "not"} reported this
-                week
+                Temple {!temple.trackedThisWeek && "not"} reported this week
               </li>
               <li className="flex flex-row">
                 {wake.trackedToday ? <CheckCircle /> : <MinusCircle />}Get up{" "}

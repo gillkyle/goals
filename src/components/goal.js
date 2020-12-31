@@ -20,7 +20,7 @@ const Goal = ({ name, subtitle, dates }) => {
           <CalendarHeatmap
             showWeekdayLabels
             horizontal={true}
-            weekdayLabels={["M", "T", "W", "Th", "F", "S", "S"]}
+            weekdayLabels={["S", "M", "T", "W", "Th", "F", "S"]}
             startDate={new Date(`${getYear(new Date()) - 1}-12-31`)}
             endDate={new Date(`${getYear(new Date())}-12-31`)}
             values={dates}
