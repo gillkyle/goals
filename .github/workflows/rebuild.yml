@@ -11,4 +11,4 @@ jobs:
     steps:
       - name: Call a webhook
         run: |
-          curl -X POST -d {} ${{ secrets.WEBHOOK_URL }}
+          curl -X POST -d {} https://webhook.gatsbyjs.com/hooks/data_source/publish/a0896012-0c72-4770-8d1c-210185e74535
