@@ -237,9 +237,9 @@ const IndexPage = ({ data }) => {
           />
           <StatCard
             title="Success %"
-            number={Math.round((temple.completed / dayOfYear) * 100)}
+            number={Math.round((temple.completed / (dayOfYear / 7)) * 100)}
             addendum="%"
-            invert={Math.round((temple.completed / dayOfYear) * 100) < 80}
+            invert={Math.round((temple.completed / (dayOfYear / 7)) * 100) < 80}
           />
         </div>
         {/* WAKE UP GOAL */}

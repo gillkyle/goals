@@ -10,13 +10,13 @@ const StatCard = ({ title, invert = false, addendum, number, ...props }) => {
       <ClientOnly>
         {invert && (
           <p className="font-bold text-3xl text-red-300">
-            {number}
+            {number > 100 ? `100` : number}
             <span className="text-sm">{title.includes(`%`) && `%`}</span>
           </p>
         )}
         {!invert && (
           <p className="font-bold text-3xl text-lime-600">
-            {number}
+            {number > 100 ? `100` : number}
             {addendum && <span className="text-sm">{addendum}</span>}
           </p>
         )}
