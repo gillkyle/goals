@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import { getDayOfYear, getYear, sub, format, isThisWeek } from "date-fns";
+import { getDayOfYear, getYear, sub, format, isWithinInterval } from "date-fns";
 import { graphql } from "gatsby";
 import { StaticImage } from "gatsby-plugin-image";
 import ReactTooltip from "react-tooltip";
@@ -9,6 +9,7 @@ import "../styles/chart.css";
 
 import Goal from "../components/goal";
 import StatCard from "../components/stat-card";
+import ClientOnly from "../components/client-only";
 import Fingerprint from "../icons/fingerprint";
 import Calendar from "../icons/calendar";
 import MinusCircle from "../icons/minus-circle";
@@ -40,10 +41,19 @@ const calculate = (nodes) => {
       const yesterday = sub(new Date(), {
         days: 1,
       });
+      const dayOneWeekAgo = sub(new Date(), {
+        days: 7,
+      });
       const yesterdayFormatted = format(yesterday, "yyyy-MM-dd");
       if (node.data.Day === todayFormatted) trackedToday = true;
       if (node.data.Day === yesterdayFormatted) trackedYesterday = true;
-      if (isThisWeek(new Date(node.data.Day))) trackedThisWeek = true;
+      if (
+        isWithinInterval(new Date(node.data.Day), {
+          start: dayOneWeekAgo,
+          end: new Date(),
+        })
+      )
+        trackedThisWeek = true;
 
       if (node.data.Status === `Done`) {
         completed += 1;
@@ -144,24 +154,32 @@ const IndexPage = ({ data }) => {
                 className="sm:p-7 p-6"
               />
             </div>
-            <ul className="flex flex-col justify-center space-y-1 text-gray-500">
-              <li className="flex flex-row">
-                {journal.trackedToday ? <CheckCircle /> : <MinusCircle />}
-                Journaling {!journal.trackedToday && "not"} reported
-              </li>
-              <li className="flex flex-row">
-                {study.trackedToday ? <CheckCircle /> : <MinusCircle />}Study{" "}
-                {!study.trackedToday && "not"} reported
-              </li>
-              <li className="flex flex-row">
-                {temple.trackedThisWeek ? <CheckCircle /> : <MinusCircle />}
-                Temple {!temple.trackedThisWeek && "not"} reported this week
-              </li>
-              <li className="flex flex-row">
-                {wake.trackedToday ? <CheckCircle /> : <MinusCircle />}Get up{" "}
-                {!wake.trackedToday && "not"} reported
-              </li>
-            </ul>
+            <ClientOnly>
+              <ul className="flex flex-col justify-center space-y-1 text-gray-500">
+                <li className="flex flex-row">
+                  {journal.trackedToday ? <CheckCircle /> : <MinusCircle />}
+                  Journaling {!journal.trackedToday && "not"} reported
+                </li>
+                <li className="flex flex-row">
+                  {study.trackedToday ? <CheckCircle /> : <MinusCircle />}Study{" "}
+                  {!study.trackedToday && "not"} reported
+                </li>
+                <li className="flex flex-row relative">
+                  {temple.trackedThisWeek ? <CheckCircle /> : <MinusCircle />}
+                  Temple {!temple.trackedThisWeek && "not"} reported{" "}
+                  <span
+                    className="absolute text-gray-400"
+                    style={{ fontSize: `0.5rem`, bottom: `-0.5rem`, right: 24 }}
+                  >
+                    last 7 days
+                  </span>
+                </li>
+                <li className="flex flex-row">
+                  {wake.trackedToday ? <CheckCircle /> : <MinusCircle />}Get up{" "}
+                  {!wake.trackedToday && "not"} reported
+                </li>
+              </ul>
+            </ClientOnly>
           </div>
         </div>
         {/* JOURNAL GOAL */}
