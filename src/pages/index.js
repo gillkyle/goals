@@ -26,8 +26,6 @@ const calculate = (nodes) => {
   const dates = nodes
     .filter((node) => {
       const year = getYear(new Date());
-      console.log({ year });
-      console.log(node.data.Day);
       if (!node) return false;
       if (!node.data) return false;
       if (node.data.Day === null) return false;
@@ -86,8 +84,6 @@ const IndexPage = ({ data }) => {
   const study = calculate(data.study.nodes);
   const temple = calculate(data.temple.nodes);
   const journal = calculate(data.journal.nodes);
-
-  console.log(temple);
 
   const dayOfYear = getDayOfYear(new Date());
 
