@@ -1,7 +1,14 @@
 import * as React from "react";
 import ClientOnly from "../components/client-only";
 
-const StatCard = ({ title, invert = false, addendum, number, ...props }) => {
+const StatCard = ({
+  title,
+  invert = false,
+  addendum,
+  number,
+  isPercentage,
+  ...props
+}) => {
   return (
     <div
       className={`${props.className} shadow-sm rounded-lg bg-white sm:p-6 p-3`}
@@ -10,13 +17,13 @@ const StatCard = ({ title, invert = false, addendum, number, ...props }) => {
       <ClientOnly>
         {invert && (
           <p className="font-bold text-3xl text-red-300">
-            {number > 100 ? `100` : number}
+            {number > 100 && isPercentage ? `100` : number}
             <span className="text-sm">{title.includes(`%`) && `%`}</span>
           </p>
         )}
         {!invert && (
           <p className="font-bold text-3xl text-lime-600">
-            {number > 100 ? `100` : number}
+            {number > 100 && isPercentage ? `100` : number}
             {addendum && <span className="text-sm">{addendum}</span>}
           </p>
         )}

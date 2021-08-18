@@ -196,6 +196,7 @@ const IndexPage = ({ data }) => {
             number={Math.round((journal.completed / dayOfYear) * 100)}
             addendum="%"
             invert={Math.round((journal.completed / dayOfYear) * 100) < 80}
+            isPercentage
           />
         </div>
         {/* STUDY GOAL */}
@@ -216,6 +217,7 @@ const IndexPage = ({ data }) => {
             number={Math.round((study.completed / dayOfYear) * 100)}
             addendum="%"
             invert={Math.round((study.completed / dayOfYear) * 100) < 80}
+            isPercentage
           />
         </div>
         {/* TEMPLE GOAL */}
@@ -236,6 +238,7 @@ const IndexPage = ({ data }) => {
             number={Math.round((temple.completed / (dayOfYear / 7)) * 100)}
             addendum="%"
             invert={Math.round((temple.completed / (dayOfYear / 7)) * 100) < 80}
+            isPercentage
           />
         </div>
         {/* WAKE UP GOAL */}
@@ -262,6 +265,7 @@ const IndexPage = ({ data }) => {
                 (wake.completed / (wake.weekdayCount || dayOfYear)) * 100
               ) < 80
             }
+            isPercentage
           />
         </div>
       </section>
